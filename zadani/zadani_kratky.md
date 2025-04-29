@@ -42,3 +42,14 @@ Zobrazení počtu potřebných vs. skutečně provedených otočení pro každé
 # Logování a Replay
 
 Průběh hry se musí dát uložit do souboru. Z uloženého souboru musí jít hru znovu načíst a "přehrát" krok za krokem popředu i pozadu. Z režimu přehrávání musí být možné kdykoli přepnout zpět do režimu hraní a pokračovat.
+
+# Poznámky
+
+# Poznámky
+
+# Poznámky
+
+nainstalovat JavaFX a vložit do složky JavaFX rozbalenej zip
+https://gluonhq.com/products/javafx/
+tam si dej dle image.png verzi 21.0.7 LTS a stahni to prvni jestli mas Linux
+pak by ti měl fungovat Makefile
