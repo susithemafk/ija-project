@@ -1,0 +1,6 @@
+{
+  "java.project.referencedLibraries": [
+    "/home/susithemafk/Desktop/ija-project/JavaFX/javafx-sdk-21.0.7/lib/**/*.jar"
+  ],
+  "java.configuration.updateBuildConfiguration": "automatic"
+}
