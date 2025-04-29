@@ -1,7 +1,10 @@
-package ija;
+package ija; // Ujisti se, že package odpovídá tvé struktuře
 
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-    }
+import javafx.stage.Stage;
+import javafx.application.Application;
+
+/**
+ * Hlavní třída aplikace LightBulb Game.
+ */
+public class Main extends Application {
 }
