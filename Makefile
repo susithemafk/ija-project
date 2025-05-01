@@ -8,11 +8,11 @@ compile:
 	javac -encoding UTF-8 -d bin --module-path "$(JFX_PATH)" --add-modules $(JFX_MODULES) -source 21 -target 21 $(shell find src -name '*.java')
 
 run: compile
-	java --module-path "$(JFX_PATH)" --add-modules $(JFX_MODULES) -cp bin $(MAIN_CLASS)
-
 	@mkdir -p bin/ija/view/images/pipes
 	@cp src/ija/view/images/*.png bin/ija/view/images/ 2>/dev/null || true
 	@cp -r src/ija/view/images/pipes bin/ija/view/images/ 2>/dev/null || true
+	
+	java --module-path "$(JFX_PATH)" --add-modules $(JFX_MODULES) -cp bin $(MAIN_CLASS)
 
 clean:
 	rm -rf bin
