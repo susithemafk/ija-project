@@ -7,12 +7,104 @@ package ija.controller;
 
 import ija.model.GameManager;
 import ija.view.BoardView;
+import ija.view.GameWindow;
 import ija.view.MenuView;
 import ija.view.StatusView;
+import ija.view.TileView;
+import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 
 public class GameController {
     private GameManager gameManager; // instance herního manažera
     private BoardView boardView; // instance vizuální reprezentace hrací desky
     private MenuView menuView; // instance vizuální reprezentace menu
     private StatusView statusView; // instance vizuální reprezentace stavu hry
+    private GameWindow gameWindow; // instance hlavního okna
+
+    public GameController(GameManager gameManager, GameWindow gameWindow) {
+        this.gameManager = gameManager;
+        this.gameWindow = gameWindow;
+        this.boardView = gameWindow.getBoardView();
+        this.menuView = gameWindow.getMenuView();
+        this.statusView = gameWindow.getStatusView();
+    }
+
+    // nastavení posluchačů událostí pro menu a hrací desku
+    public void initialize() {
+        // listener kliknutí na nová hra
+        menuView.getNewGameItem().setOnAction(event -> startNewGame());
+
+        // listener kliknutí na konec
+        menuView.getExitItem().setOnAction(event -> Platform.exit());
+
+        // spuštění nové hry při startu aplikace
+        startNewGame();
+    }
+
+    // spuštění nové hry
+    public void startNewGame() {
+        System.out.println("GameController: Spouštění nové hry...");
+
+        // restart herního manažera
+        gameManager.setupNewGame();
+
+        // přepsání desky
+        boardView.drawBoard(gameManager.getBoard());
+
+        // přepsání stavů napájení
+        boardView.updateAllTiles();
+
+        // přepsání počítadla kroků
+        statusView.updateSteps(gameManager.getCountOfSteps());
+
+        // přepsání zprávy
+        statusView.clearMessage();
+
+        // přidání listeneru na kliknutí na desku
+        boardView.getGridPane().setOnMouseClicked(event -> handleBoardClick(event));
+
+        System.out.println("GameController: Nová hra připravena.");
+    }
+
+    // zpracování kliknutí na dlaždici
+    private void handleBoardClick(MouseEvent event) {
+        Node clickedNode = event.getPickResult().getIntersectedNode();
+
+        // hledání TileView
+        Node parent = clickedNode;
+        while (parent != null && !(parent instanceof TileView)) {
+            parent = parent.getParent();
+        }
+
+        // pokud bylo kliknuto na dlaždici
+        if (parent instanceof TileView) {
+            // přetypování parenta
+            TileView clickedTileView = (TileView) parent;
+
+            // souřadnice kliknuté dlaždice
+            int colIndex = GridPane.getColumnIndex(clickedTileView);
+            int rowIndex = GridPane.getRowIndex(clickedTileView);
+
+            System.out.println("GameController: Klik na TileView na [" + rowIndex + "," + colIndex + "]");
+
+            // otočení dlaždice
+            gameManager.rotateTile(rowIndex, colIndex);
+
+            // aktualizace vzhledu dlaždic
+            boardView.updateAllTiles();
+
+            // aktualizace počítadla kroků
+            statusView.updateSteps(gameManager.getCountOfSteps());
+
+            if (gameManager.checkWinCondition()) {
+                statusView.showMessage("Výhra", false);
+
+                // zákaz dalšího klikání na desku
+                boardView.getGridPane().setOnMouseClicked(null);
+            }
+        }
+        // jinak klik vedle
+    }
 }
