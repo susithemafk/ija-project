@@ -28,16 +28,16 @@ public class GameManager {
         // vytvoření dlaždic
         Tile source = new Tile(TileType.SOURCE);
         Tile t11 = new Tile(TileType.T_PIPE);
-        t11.setCorrectOrientation(1);
+        t11.setCorrectOrientation(2);
         Tile t10 = new Tile(TileType.L_PIPE);
-        t10.setCorrectOrientation(0);
+        t10.setCorrectOrientation(1);
         Tile t20 = new Tile(TileType.I_PIPE);
         t20.setCorrectOrientation(0);
         Tile bulb30 = new Tile(TileType.BULB);
         Tile t12 = new Tile(TileType.L_PIPE);
-        t12.setCorrectOrientation(1);
+        t12.setCorrectOrientation(2);
         Tile t22 = new Tile(TileType.I_PIPE);
-        t22.setCorrectOrientation(1);
+        t22.setCorrectOrientation(0);
         Tile bulb32 = new Tile(TileType.BULB);
 
         // umístění na desku
@@ -79,14 +79,14 @@ public class GameManager {
         if (tile != null && tile.getType() != TileType.EMPTY && tile.getType() != TileType.SOURCE
                 && tile.getType() != TileType.BULB) {
 
-            System.out.println("GameManager: Otáčím políčko na [" + row + "," + col + "], rotace: "
-                    + tile.getOrientation());
-
             // otočení
             tile.rotate();
 
             // přičtení kroku
             this.countOfSteps++;
+
+            System.out.println("GameManager: Otáčím políčko na [" + row + "," + col + "], rotace: "
+                    + tile.getOrientation());
 
             // přepočítání
             updatePowerState();

@@ -79,6 +79,16 @@ public class Tile {
             difference += 4;
         }
 
+        // I pipe může mít max 1 otočení pro správnou orientaci
+        if (this.type == TileType.I_PIPE) {
+            if (difference == 1 || difference == 3) {
+                return 1;
+            }
+            if (difference == 2) {
+                return 0;
+            }
+        }
+
         // zbytek po dělení 4
         return difference % 4;
     }

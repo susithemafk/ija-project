@@ -30,11 +30,13 @@ public class MenuView {
         showHintItem = new MenuItem("Zobrazit nápovědu");
         exitItem = new MenuItem("Konec");
 
-        // separátor
-        SeparatorMenuItem separator = new SeparatorMenuItem();
-
         // přidání položek do menu
-        gameMenu.getItems().addAll(newGameItem, separator, exitItem);
+        gameMenu.getItems().addAll(
+                newGameItem,
+                new SeparatorMenuItem(),
+                showHintItem,
+                new SeparatorMenuItem(),
+                exitItem);
 
         // přidání menu do menubaru
         menuBar.getMenus().add(gameMenu);
@@ -50,8 +52,11 @@ public class MenuView {
         return newGameItem;
     }
 
+    public MenuItem getShowHintItem() {
+        return showHintItem;
+    }
+
     public MenuItem getExitItem() {
         return exitItem;
     }
-
 }
