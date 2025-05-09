@@ -18,13 +18,15 @@ public class GameManager {
     private GameBoard gameBoard; // hrací deska
     private int countOfSteps; // počet provedených kroků
     private GameLogger logger; // logger pro ukládání průběhu hry
+    private Difficulty difficulty;
 
-    public GameManager() {
+    public GameManager(Difficulty difficulty) {
         this.countOfSteps = 0;
 
         // nový logger
         this.logger = new GameLogger(Constants.LOG_FILE_NAME);
 
+        this.difficulty = difficulty;
     }
 
     public void setupNewGame() {
@@ -33,30 +35,32 @@ public class GameManager {
         this.gameBoard = new GameBoard(Constants.DEFAULT_WIDTH, Constants.DEFAULT_HEIGHT);
         this.countOfSteps = 0;
 
-        // vytvoření dlaždic
-        Tile source = new Tile(TileType.SOURCE);
-        Tile t11 = new Tile(TileType.T_PIPE);
-        t11.setCorrectOrientation(2);
-        Tile t10 = new Tile(TileType.L_PIPE);
-        t10.setCorrectOrientation(1);
-        Tile t20 = new Tile(TileType.I_PIPE);
-        t20.setCorrectOrientation(0);
-        Tile bulb30 = new Tile(TileType.BULB);
-        Tile t12 = new Tile(TileType.L_PIPE);
-        t12.setCorrectOrientation(2);
-        Tile t22 = new Tile(TileType.I_PIPE);
-        t22.setCorrectOrientation(0);
-        Tile bulb32 = new Tile(TileType.BULB);
+        if (difficulty == Difficulty.LEHKA) {
+            // vytvoření dlaždic
+            Tile source = new Tile(TileType.SOURCE);
+            Tile t11 = new Tile(TileType.T_PIPE);
+            t11.setCorrectOrientation(2);
+            Tile t10 = new Tile(TileType.L_PIPE);
+            t10.setCorrectOrientation(1);
+            Tile t20 = new Tile(TileType.I_PIPE);
+            t20.setCorrectOrientation(0);
+            Tile bulb30 = new Tile(TileType.BULB);
+            Tile t12 = new Tile(TileType.L_PIPE);
+            t12.setCorrectOrientation(2);
+            Tile t22 = new Tile(TileType.I_PIPE);
+            t22.setCorrectOrientation(0);
+            Tile bulb32 = new Tile(TileType.BULB);
 
-        // umístění na desku
-        gameBoard.setTile(0, 1, source);
-        gameBoard.setTile(1, 1, t11);
-        gameBoard.setTile(1, 0, t10);
-        gameBoard.setTile(2, 0, t20);
-        gameBoard.setTile(3, 0, bulb30);
-        gameBoard.setTile(1, 2, t12);
-        gameBoard.setTile(2, 2, t22);
-        gameBoard.setTile(3, 2, bulb32);
+            // umístění na desku
+            gameBoard.setTile(0, 1, source);
+            gameBoard.setTile(1, 1, t11);
+            gameBoard.setTile(1, 0, t10);
+            gameBoard.setTile(2, 0, t20);
+            gameBoard.setTile(3, 0, bulb30);
+            gameBoard.setTile(1, 2, t12);
+            gameBoard.setTile(2, 2, t22);
+            gameBoard.setTile(3, 2, bulb32);
+        }
 
         // náhodné otočení a nastavení currentOrientation - otočení 0-3
         java.util.Random random = new java.util.Random();

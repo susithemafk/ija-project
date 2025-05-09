@@ -3,3 +3,6 @@ bin/
 
 game_log.log
 savegame.dat
+target/classes
+target/maven-status
+targer

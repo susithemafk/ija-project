@@ -2,6 +2,7 @@ package ija;
 
 import javafx.stage.Stage;
 import ija.controller.GameController;
+import ija.model.Difficulty;
 import ija.model.GameManager;
 import ija.view.GameWindow;
 import javafx.application.Application;
@@ -10,12 +11,20 @@ import javafx.application.Application;
  * Hlavní třída aplikace LightBulb Game.
  */
 public class Main extends Application {
+    // Aktuálně zvolená obtížnost hry
+    public static Difficulty difficulty = Difficulty.LEHKA;
 
+    /**
+     * Inicializační metoda JavaFX. Vytváří GameManager, GameWindow a
+     * GameController.
+     *
+     * @param stage hlavní okno aplikace
+     */
     @Override
     public void start(Stage stage) {
         try {
             // inicializace
-            GameManager gameManager = new GameManager();
+            GameManager gameManager = new GameManager(difficulty);
             GameWindow gameWindow = new GameWindow(stage);
             GameController gameController = new GameController(gameManager, gameWindow);
             gameController.initialize();
@@ -25,6 +34,11 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Vstupní bod programu. Spouští JavaFX aplikaci.
+     *
+     * @param args argumenty příkazové řádky
+     */
     public static void main(String[] args) {
         launch(args);
     }

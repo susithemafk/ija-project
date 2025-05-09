@@ -3,6 +3,9 @@
  */
 package ija.view;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import ija.model.Tile;
@@ -20,7 +23,7 @@ public class TileView extends StackPane {
     private Rectangle background; // pozadí
     private ImageView imageView; // obrázek
 
-    private static final String IMAGES_PATH = "images/";
+    private static final String IMAGES_PATH = "";
 
     public TileView(Tile tileData) {
         this.tileData = tileData;
@@ -103,10 +106,14 @@ public class TileView extends StackPane {
                 return null;
         }
 
-        String fullPath = IMAGES_PATH + path;
+        String libPath = new File("lib").getAbsolutePath();
+        String fullPath = libPath + File.separator + path;
 
-        // načtení obrázku
-        InputStream stream = getClass().getResourceAsStream(fullPath);
-        return new Image(stream);
+        try {
+            return new Image(new FileInputStream(fullPath));
+        } catch (FileNotFoundException e) {
+            System.err.println("Image not found: " + fullPath);
+            return null;
+        }
     }
 }
