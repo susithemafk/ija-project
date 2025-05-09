@@ -248,7 +248,7 @@ public class GameController {
     private void handleSaveGame() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Uložit hru");
-        fileChooser.setInitialFileName("savegame.dat");
+        fileChooser.setInitialFileName(Constants.SAVE_GAME_NAME);
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Uložené hry", "*.dat"));
         File fileToSave = fileChooser.showSaveDialog(gameWindow.getPrimaryStage());
 
