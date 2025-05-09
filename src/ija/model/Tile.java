@@ -36,6 +36,7 @@ public class Tile {
         return isPowered;
     }
 
+
     public void setOrientation(int orientation) {
         if (orientation < 0) {
             orientation = orientation + 4;

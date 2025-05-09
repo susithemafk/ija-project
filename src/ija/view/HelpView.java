@@ -7,6 +7,7 @@ import ija.model.GameBoard;
 import ija.model.Tile;
 import ija.model.TileType;
 import ija.util.Constants;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -20,17 +21,17 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public class HelpView {
-    private Stage hintStage;
+    private Stage helpStage;
     private GridPane gridPane;
     private GameBoard gameBoard;
 
     public HelpView(Window owner, GameBoard board) {
         this.gameBoard = board;
 
-        hintStage = new Stage();
-        hintStage.initOwner(owner);
-        hintStage.initModality(Modality.NONE);
-        hintStage.setTitle("Nápověda");
+        helpStage = new Stage();
+        helpStage.initOwner(owner);
+        helpStage.initModality(Modality.NONE);
+        helpStage.setTitle("Nápověda");
 
         gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
@@ -39,11 +40,14 @@ public class HelpView {
         gridPane.setHgap(1);
         gridPane.setVgap(1);
 
+        // odsazení v okně
+        gridPane.setPadding(new Insets(10));
+
         // obsah nápovědy
         showHelp();
 
         Scene scene = new Scene(gridPane);
-        hintStage.setScene(scene);
+        helpStage.setScene(scene);
     }
 
     // zobrazení nápovědy
@@ -95,7 +99,7 @@ public class HelpView {
 
     // zobrazení okna nápovědy
     public void showHelpWindow() {
-        hintStage.show();
+        helpStage.show();
     }
 
     // aktualizace dle stavu desky
@@ -106,11 +110,11 @@ public class HelpView {
 
     // zavření okna nápovědy
     public void closeHelp() {
-        hintStage.close();
+        helpStage.close();
     }
 
     // zda je okno nápovědy otevřené
     public boolean isHelpOpen() {
-        return hintStage.isShowing();
+        return helpStage.isShowing();
     }
 }

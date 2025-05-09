@@ -10,13 +10,21 @@ import java.util.Queue;
 import java.util.Set;
 import ija.util.Constants;
 import ija.util.Side;
+import ija.persistence.GameLogger;
+import ija.replay.ReplayManager;
+import ija.replay.ReplayManager.MoveRecord;
 
 public class GameManager {
     private GameBoard gameBoard; // hrací deska
     private int countOfSteps; // počet provedených kroků
+    private GameLogger logger; // logger pro ukládání průběhu hry
 
     public GameManager() {
         this.countOfSteps = 0;
+
+        // nový logger
+        this.logger = new GameLogger(Constants.LOG_FILE_NAME);
+
     }
 
     public void setupNewGame() {
@@ -66,6 +74,10 @@ public class GameManager {
             }
         }
 
+        // přidání zdroje do loggeru
+        logger.logGameStart(gameBoard.getWidth(), gameBoard.getHeight(),
+                generateInitialSetupStringFromBoard(this.gameBoard));
+
         // přepočítání počátečního stavu napájení
         updatePowerState();
 
@@ -87,6 +99,9 @@ public class GameManager {
 
             System.out.println("GameManager: Otáčím políčko na [" + row + "," + col + "], rotace: "
                     + tile.getOrientation());
+
+            // zalogování
+            logger.logMove(row, col, tile.getOrientation());
 
             // přepočítání
             updatePowerState();
@@ -224,7 +239,90 @@ public class GameManager {
             }
         }
 
+        // log konce hry
+        logger.logGameEnd();
         System.out.println("GameManager: Výherní podmínka splněna!");
+
         return true;
+    }
+
+    /**
+     * Načte hru z logu.
+     * Logika je taková, že uložená hra je uložen log hry, ten se zde načte a
+     * provede se otočení dlaždic dle příkazů MOVE a přepsání aktuální desky.
+     */
+    public void loadGameFromLog() {
+        ReplayManager tempReplayManager = new ReplayManager(Constants.LOG_FILE_NAME);
+
+        // načtení logu
+        if (tempReplayManager.loadLog()) {
+            GameBoard tempBoard = tempReplayManager.getGameBoard();
+            List<MoveRecord> movesFromLog = tempReplayManager.getParsedMoves();
+
+            // pro všechny příkazy MOVE se provede otočení dlaždice a zapsání kroku
+            this.countOfSteps = 0;
+            for (MoveRecord move : movesFromLog) {
+                Tile tileToUpdate = tempBoard.getTile(move.row(), move.col());
+                if (tileToUpdate != null &&
+                        tileToUpdate.getType() != TileType.EMPTY &&
+                        tileToUpdate.getType() != TileType.SOURCE &&
+                        tileToUpdate.getType() != TileType.BULB) {
+
+                    // správné otočení
+                    tileToUpdate.setOrientation(move.newOrientation());
+
+                    // přičtení kroku
+                    this.countOfSteps++;
+                }
+            }
+
+            this.gameBoard = tempBoard;
+
+            updatePowerState();
+            System.out.println("GameManager: Hra načtena z logu, počet kroků: " + this.countOfSteps);
+        } else {
+            System.err.println("GameManager: Chyba při načítání logu pro obnovení hry. Spouštím novou hru.");
+            setupNewGame();
+        }
+    }
+
+    /**
+     * Generuje string initial setupu hrací desky.
+     * Formát: řádek, sloupec, typ dlaždice, správná orientace, aktuální orientace.
+     * 
+     * @example 0,1,SOURCE,0,0|1,0,L_PIPE,1,0|...
+     */
+    private String generateInitialSetupStringFromBoard(GameBoard board) {
+        if (board == null)
+            return "";
+
+        StringBuilder sb = new StringBuilder();
+        for (int row = 0; row < board.getHeight(); row++) {
+            for (int col = 0; col < board.getWidth(); col++) {
+                Tile tile = board.getTile(row, col);
+
+                if (tile != null && tile.getType() != TileType.EMPTY) {
+                    if (sb.length() > 0) {
+                        sb.append("|");
+                    }
+
+                    sb.append(row).append(",").append(col).append(",")
+                            .append(tile.getType().toString()).append(",")
+                            .append(tile.getCorrectOrientation()).append(",")
+                            .append(tile.getOrientation());
+                }
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public void setBoard(GameBoard board) {
+        this.gameBoard = board;
+        updatePowerState();
+    }
+
+    public void setCountOfSteps(int steps) {
+        this.countOfSteps = steps;
     }
 }

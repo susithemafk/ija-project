@@ -54,8 +54,10 @@ https://gluonhq.com/products/javafx/
 tam si dej dle image.png verzi 21.0.7 LTS a stahni to prvni jestli mas Linux
 pak by ti měl fungovat Makefile
 
-tak prej to JavaFX jde dát nějak přes Maven 
+tak prej to JavaFX jde dát nějak přes Maven
 
-// TODO 
-vrátit možnost otáčení žárovky 
-roztočit žárovky náhodně při nové hře 
+// TODO
+vrátit možnost otáčení žárovky
+roztočit žárovky náhodně při nové hře
+dostat JavaFX do toho mavenu nějak či co
+fix zobrazeni replaye kdyz nejsou moves

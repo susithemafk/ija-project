@@ -12,8 +12,11 @@ public class GameWindow {
     private MenuView menuView; // vizuální reprezentace menu
     private StatusView statusView; // vizuální reprezentace stavu hry
     private BorderPane layout; // hlavní layout
+    private Stage primaryStage; // primary stage pro save a load hry
 
     public GameWindow(Stage stage) {
+        this.primaryStage = stage;
+
         // inicializace layoutu
         this.layout = new BorderPane();
 
@@ -48,5 +51,9 @@ public class GameWindow {
 
     public StatusView getStatusView() {
         return statusView;
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 }

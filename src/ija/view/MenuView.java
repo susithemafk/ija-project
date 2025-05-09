@@ -15,6 +15,7 @@ public class MenuView {
     private MenuItem loadGameItem;
     private MenuItem showHintItem;
     private MenuItem exitItem;
+    private MenuItem replayGameItem;
 
     public MenuView() {
         // vytvoření menubaru
@@ -28,13 +29,17 @@ public class MenuView {
         saveGameItem = new MenuItem("Uložit hru");
         loadGameItem = new MenuItem("Načíst hru");
         showHintItem = new MenuItem("Zobrazit nápovědu");
+        replayGameItem = new MenuItem("Přehrát poslední hru");
         exitItem = new MenuItem("Konec");
 
         // přidání položek do menu
         gameMenu.getItems().addAll(
                 newGameItem,
+                saveGameItem, // Přidáno
+                loadGameItem, // Přidáno
                 new SeparatorMenuItem(),
                 showHintItem,
+                replayGameItem,
                 new SeparatorMenuItem(),
                 exitItem);
 
@@ -52,8 +57,20 @@ public class MenuView {
         return newGameItem;
     }
 
+    public MenuItem getSaveGameItem() {
+        return saveGameItem;
+    } // Getter
+
+    public MenuItem getLoadGameItem() {
+        return loadGameItem;
+    } // Getter
+
     public MenuItem getShowHintItem() {
         return showHintItem;
+    }
+
+    public MenuItem getReplayGameItem() {
+        return replayGameItem;
     }
 
     public MenuItem getExitItem() {
