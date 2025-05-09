@@ -18,24 +18,22 @@ public class GameManager {
     private GameBoard gameBoard; // hrací deska
     private int countOfSteps; // počet provedených kroků
     private GameLogger logger; // logger pro ukládání průběhu hry
-    private Difficulty difficulty;
 
-    public GameManager(Difficulty difficulty) {
+    public GameManager() {
         this.countOfSteps = 0;
 
         // nový logger
         this.logger = new GameLogger(Constants.LOG_FILE_NAME);
-
-        this.difficulty = difficulty;
     }
 
-    public void setupNewGame() {
+    public void setupNewGame(Difficulty difficulty) {
         System.out.println("GameManager: Vytváření nové hry...");
 
-        this.gameBoard = new GameBoard(Constants.DEFAULT_WIDTH, Constants.DEFAULT_HEIGHT);
         this.countOfSteps = 0;
 
         if (difficulty == Difficulty.LEHKA) {
+            this.gameBoard = new GameBoard(Constants.DEFAULT_WIDTH, Constants.DEFAULT_HEIGHT);
+
             // vytvoření dlaždic
             Tile source = new Tile(TileType.SOURCE);
             Tile t11 = new Tile(TileType.T_PIPE);
@@ -60,6 +58,43 @@ public class GameManager {
             gameBoard.setTile(1, 2, t12);
             gameBoard.setTile(2, 2, t22);
             gameBoard.setTile(3, 2, bulb32);
+        } else if (difficulty == Difficulty.TEZKA) {
+            this.gameBoard = new GameBoard(5, 5);
+
+            Tile source = new Tile(TileType.SOURCE);
+            Tile l01 = new Tile(TileType.L_PIPE);
+            l01.setCorrectOrientation(2);
+            Tile l11 = new Tile(TileType.L_PIPE);
+            l11.setCorrectOrientation(0);
+            Tile l12 = new Tile(TileType.L_PIPE);
+            l12.setCorrectOrientation(2);
+            Tile i22 = new Tile(TileType.I_PIPE);
+            i22.setCorrectOrientation(0);
+            Tile l32 = new Tile(TileType.L_PIPE);
+            l32.setCorrectOrientation(0);
+            Tile i33 = new Tile(TileType.I_PIPE);
+            i33.setCorrectOrientation(1);
+            Tile l34 = new Tile(TileType.L_PIPE);
+            l34.setCorrectOrientation(2);
+            Tile bulb44 = new Tile(TileType.BULB);
+
+            gameBoard.setTile(0, 0, source);
+            gameBoard.setTile(0, 1, l01);
+            gameBoard.setTile(1, 1, l11);
+            gameBoard.setTile(1, 2, l12);
+            gameBoard.setTile(2, 2, i22);
+            gameBoard.setTile(3, 2, l32);
+            gameBoard.setTile(3, 3, i33);
+            gameBoard.setTile(3, 4, l34);
+            gameBoard.setTile(4, 4, bulb44);
+
+            // na zmatení
+            Tile fake1 = new Tile(TileType.T_PIPE);
+            fake1.setCorrectOrientation(0);
+            gameBoard.setTile(2, 0, fake1);
+            Tile fake2 = new Tile(TileType.L_PIPE);
+            fake2.setCorrectOrientation(1);
+            gameBoard.setTile(4, 1, fake2);
         }
 
         // náhodné otočení a nastavení currentOrientation - otočení 0-3
@@ -286,7 +321,7 @@ public class GameManager {
             System.out.println("GameManager: Hra načtena z logu, počet kroků: " + this.countOfSteps);
         } else {
             System.err.println("GameManager: Chyba při načítání logu pro obnovení hry. Spouštím novou hru.");
-            setupNewGame();
+            setupNewGame(Difficulty.TEZKA); // TODO: přidat logování obtížnosti
         }
     }
 

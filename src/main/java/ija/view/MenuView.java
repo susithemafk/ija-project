@@ -6,7 +6,9 @@ package ija.view;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.ToggleGroup;
 
 public class MenuView {
     private MenuBar menuBar;
@@ -16,6 +18,9 @@ public class MenuView {
     private MenuItem showHintItem;
     private MenuItem exitItem;
     private MenuItem replayGameItem;
+    private RadioMenuItem easyDifficultyItem;
+    private RadioMenuItem hardDifficultyItem;
+    private ToggleGroup difficultyToggleGroup;
 
     public MenuView() {
         // vytvoření menubaru
@@ -23,6 +28,22 @@ public class MenuView {
 
         // vytvoření menu
         Menu gameMenu = new Menu("Hra");
+
+        // vytvoření pro obtížnost
+        Menu difficultyMenu = new Menu("Obtížnost");
+        difficultyToggleGroup = new ToggleGroup();
+
+        // easy
+        easyDifficultyItem = new RadioMenuItem("Lehká");
+        easyDifficultyItem.setToggleGroup(difficultyToggleGroup);
+        easyDifficultyItem.setSelected(true);
+
+        // hard
+        hardDifficultyItem = new RadioMenuItem("Těžká");
+        hardDifficultyItem.setToggleGroup(difficultyToggleGroup);
+
+        // přidání položek do menu
+        difficultyMenu.getItems().addAll(easyDifficultyItem, hardDifficultyItem);
 
         // vytvoření menuitemů
         newGameItem = new MenuItem("Nová hra");
@@ -44,7 +65,7 @@ public class MenuView {
                 exitItem);
 
         // přidání menu do menubaru
-        menuBar.getMenus().add(gameMenu);
+        menuBar.getMenus().addAll(gameMenu, difficultyMenu);
 
         // funkcionalita menu implementována v GameControlleru
     }
@@ -59,11 +80,11 @@ public class MenuView {
 
     public MenuItem getSaveGameItem() {
         return saveGameItem;
-    } // Getter
+    }
 
     public MenuItem getLoadGameItem() {
         return loadGameItem;
-    } // Getter
+    }
 
     public MenuItem getShowHintItem() {
         return showHintItem;
@@ -76,4 +97,13 @@ public class MenuView {
     public MenuItem getExitItem() {
         return exitItem;
     }
+
+    public RadioMenuItem getEasyDifficultyItem() {
+        return easyDifficultyItem;
+    }
+
+    public RadioMenuItem getHardDifficultyItem() {
+        return hardDifficultyItem;
+    }
+
 }

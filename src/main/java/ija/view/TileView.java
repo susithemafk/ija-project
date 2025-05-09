@@ -6,24 +6,23 @@ package ija.view;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 import ija.model.Tile;
 import ija.model.TileType;
 import ija.util.Constants;
+import javafx.animation.RotateTransition;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class TileView extends StackPane {
     private Tile tileData; // reference na data
     private Rectangle background; // pozadí
     private ImageView imageView; // obrázek
-
-    private static final String IMAGES_PATH = "";
 
     public TileView(Tile tileData) {
         this.tileData = tileData;
@@ -56,11 +55,25 @@ public class TileView extends StackPane {
         if (image != null) {
             // nastavíme obrázek
             imageView.setImage(image);
-            imageView.setRotate(tileData.getOrientation() * 90.0);
+            // imageView.setRotate(tileData.getOrientation() * 90.0);
             imageView.setVisible(true);
         } else {
             // necháme jak je
         }
+    }
+
+    // animace
+    public void animateRotationAndSync() {
+        double angle = 90;
+
+        RotateTransition rt = new RotateTransition(Duration.millis(200), imageView);
+        rt.setByAngle(angle);
+        rt.setCycleCount(1);
+        rt.setOnFinished(event -> {
+            imageView.setRotate(tileData.getOrientation() * 90.0);
+            updateView();
+        });
+        rt.play();
     }
 
     // získání obrázku pro danou dlaždici
@@ -112,7 +125,7 @@ public class TileView extends StackPane {
         try {
             return new Image(new FileInputStream(fullPath));
         } catch (FileNotFoundException e) {
-            System.err.println("Image not found: " + fullPath);
+            System.err.println("Obrázek nenalezen: " + fullPath);
             return null;
         }
     }

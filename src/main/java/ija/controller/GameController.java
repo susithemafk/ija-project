@@ -5,6 +5,7 @@
  */
 package ija.controller;
 
+import ija.model.Difficulty;
 import ija.model.GameBoard;
 import ija.model.GameManager;
 import ija.persistence.SaveLoadManager;
@@ -54,7 +55,7 @@ public class GameController {
     // nastavení posluchačů událostí pro menu a hrací desku
     public void initialize() {
         // listener kliknutí na nová hra
-        menuView.getNewGameItem().setOnAction(event -> startNewGame());
+        menuView.getNewGameItem().setOnAction(event -> startNewGame(Difficulty.LEHKA));
 
         // listener kliknutí na uložení hry
         menuView.getSaveGameItem().setOnAction(event -> handleSaveGame());
@@ -71,16 +72,26 @@ public class GameController {
         // listener kliknutí na konec
         menuView.getExitItem().setOnAction(event -> Platform.exit());
 
+        // listener kliknutí na obtížnost a nastavení checkboxu obtížnosti v menu
+        menuView.getEasyDifficultyItem().setOnAction(event -> {
+            startNewGame(Difficulty.LEHKA);
+            menuView.getEasyDifficultyItem().setSelected(true);
+        });
+        menuView.getHardDifficultyItem().setOnAction(event -> {
+            startNewGame(Difficulty.TEZKA);
+            menuView.getHardDifficultyItem().setSelected(true);
+        });
+
         // spuštění nové hry při startu aplikace
-        startNewGame();
+        startNewGame(Difficulty.LEHKA);
     }
 
     // spuštění nové hry
-    public void startNewGame() {
+    public void startNewGame(Difficulty difficulty) {
         System.out.println("GameController: Spouštění nové hry...");
 
         // restart herního manažera
-        gameManager.setupNewGame();
+        gameManager.setupNewGame(difficulty);
 
         // přepsání desky
         boardView.drawBoard(gameManager.getBoard());
@@ -134,6 +145,7 @@ public class GameController {
 
             // otočení dlaždice
             gameManager.rotateTile(rowIndex, colIndex);
+            clickedTileView.animateRotationAndSync();
 
             // aktualizace vzhledu dlaždic
             boardView.updateAllTiles();
